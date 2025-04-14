@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -39,22 +41,31 @@ export default function LoginPage() {
     <div className="form-wrapper">
       <h2>Вход</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Имя пользователя"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Пароль"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Имя пользователя"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+        </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Войти</button>
+        <div className="form-group">
+          <button type="submit">Войти</button>
+        </div>
+        <div className="form-footer">
+          <Link to="/forgot-password">Забыли пароль?</Link>
+        </div>
       </form>
     </div>
   );

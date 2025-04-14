@@ -1,3 +1,4 @@
+// src/pages/RegisterPage.tsx
 import { useState } from 'react';
 
 export default function RegisterPage() {
@@ -5,10 +6,21 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+
+  const isValidPassword = (pwd: string) => {
+    return /^.*(?=.{8,16})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/.test(pwd);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setMessage('');
+
+    if (!isValidPassword(password)) {
+      setError('Пароль должен быть от 8 до 16 символов и содержать буквы, цифры и спецсимволы');
+      return;
+    }
 
     try {
       const response = await fetch('https://localhost:7206/api/auth/register', {
@@ -28,12 +40,11 @@ export default function RegisterPage() {
       }
 
       const data = await response.json();
-      console.log('Регистрация прошла успешно:', data);
-
       localStorage.setItem('token', data.token);
+      setMessage('Регистрация успешна!');
       window.location.href = '/';
     } catch (err: any) {
-      setError(err.message || 'Ошибка регистрации');
+      setError(err.message || 'Произошла ошибка при регистрации');
     }
   };
 
@@ -41,29 +52,38 @@ export default function RegisterPage() {
     <div className="form-wrapper">
       <h2>Регистрация</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Имя пользователя"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Пароль"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Имя пользователя"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {message && <p style={{ color: 'green' }}>{message}</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Зарегистрироваться</button>
+        <div className="form-group">
+          <button type="submit">Зарегистрироваться</button>
+        </div>
       </form>
     </div>
   );
