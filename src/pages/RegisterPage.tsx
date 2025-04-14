@@ -40,7 +40,16 @@ export default function RegisterPage() {
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token);
+
+      if (!data.success){
+        throw new Error('Неизвестная ошибка');
+      }
+      
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('accessTokenExpires', data.accessTokenExpires);
+      localStorage.setItem('refreshToken', data.accessTokenExpires);
+      localStorage.setItem('refreshTokenExpires', data.accessTokenExpires);
+      
       setMessage('Регистрация успешна!');
       window.location.href = '/';
     } catch (err: any) {

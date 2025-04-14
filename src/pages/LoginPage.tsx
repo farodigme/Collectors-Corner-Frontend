@@ -1,11 +1,18 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem('accessToken');
+  //   if (token) {
+  //     navigate('/home');
+  //   }
+  // }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,10 +35,17 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      console.log('JWT Token:', data.token);
 
-      localStorage.setItem('token', data.token);
-      window.location.href = '/';
+      if (!data.success) {
+        throw new Error('Неизвестная ошибка');
+      }
+
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('accessTokenExpires', data.accessTokenExpires);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('refreshTokenExpires', data.refreshTokenExpires);
+
+      navigate('/home');
     } catch (err: any) {
       setError(err.message || 'Ошибка входа');
     }
