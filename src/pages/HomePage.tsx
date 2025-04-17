@@ -1,11 +1,10 @@
-// src/pages/HomePage.tsx
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AvatarDropdown from '../components/AvatarDropdown';
+
 
 export default function HomePage() {
   const [userData, setUserData] = useState<any>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,9 +15,7 @@ export default function HomePage() {
     }
 
     fetch('https://localhost:7206/api/account/getuser', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
       .then(data => {
@@ -28,58 +25,29 @@ export default function HomePage() {
       .catch(() => navigate('/login'));
   }, [navigate]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   if (!userData) return <div className="form-wrapper">Загрузка...</div>;
 
   return (
     <div className="home-wrapper">
-      <header className="nav-bar">
-        <div className="nav-logo">Collectors Corner</div>
-        <div className="nav-user" ref={menuRef}>
-          <div
-            className="nav-avatar"
-            title={userData.username}
-            onClick={() => setMenuOpen(prev => !prev)}
-          >
-            {userData.username.slice(0, 1).toUpperCase()}
-          </div>
-          {menuOpen && (
-            <div className="nav-dropdown">
-              <a href="/home">Мои коллекции</a>
-              <a href="/account">Аккаунт</a>
-              <a href="/settings">Настройки</a>
-              <button
-                onClick={() => {
-                  localStorage.clear();
-                  navigate('/login');
-                }}
-              >
-                Выйти
-              </button>
-            </div>
-          )}
-        </div>
+      <header className="nav-bar flex justify-between items-center px-4 py-2 shadow-md">
+        <div className="nav-logo font-bold">Collectors Corner</div>
+        <AvatarDropdown username={userData.username} />
       </header>
-      <main className="collections-container">
+
+      <main className="collections-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
         {userData.collections.map((col: any) => (
-          <div className="collection-card" key={col.id}>
+          <div className="collection-card bg-white shadow-md rounded-lg overflow-hidden" key={col.id}>
             <img
-              src={`https://localhost:7210/api/image/get/${col.imageUrl}`}
+              src={col.imageUrl}
               alt={col.title}
+              className="w-full h-48 object-cover"
             />
-            <div className="collection-content">
-              <h3>{col.title}</h3>
-              <p>{col.description}</p>
-              <span className="badge">{col.category}</span>
+            <div className="collection-content p-3">
+              <h3 className="font-semibold text-lg">{col.title}</h3>
+              <p className="text-sm text-gray-600">{col.description}</p>
+              <span className="badge inline-block mt-2 bg-blue-100 text-blue-800 rounded px-2 py-1 text-xs">
+                {col.category}
+              </span>
             </div>
           </div>
         ))}
