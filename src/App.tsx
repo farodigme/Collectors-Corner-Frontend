@@ -6,9 +6,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import HomePage from './pages/HomePage';
 import AccountPage from './pages/AccountPage';
-
-
-
+import CollectionViewPage from './pages/CollectionViewPage';
 
 import './styles.css';
 
@@ -23,6 +21,7 @@ export default function App() {
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/collection/:collectionId" element={<CollectionViewPage />} />
       </Routes>
     </Router>
   );
