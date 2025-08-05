@@ -1,0 +1,17 @@
+{{baseUrl}}/api/account/update-nickname 
+body:
+{
+    "Nickname":"adasdaasd"
+}
+
+{{baseUrl}}/api/account/get-user
+
+{{baseUrl}}/api/account/update-email
+body:
+{
+    "Email": "newemail@mail.ru"
+}
+
+{{baseUrl}}/api/account/update-avatar
+body form-data:
+Image (file) 

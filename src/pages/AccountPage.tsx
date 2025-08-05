@@ -4,9 +4,11 @@ import AvatarDropdown from '../components/AvatarDropdown';
 
 interface User {
   username: string;
+  nickname: string;
   email: string;
   avatarUrl?: string;
-  createdAt: string;
+  created: string;
+  collections?: any[];
 }
 
 export default function AccountPage() {
@@ -17,15 +19,12 @@ export default function AccountPage() {
   
   // Форма обновления данных
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    currentPassword: '',
-    newPassword: ''
+    nickname: '',
+    email: ''
   });
   
   // Состояния для модальных окон
   const [showAvatarModal, setShowAvatarModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
   
   // Состояния для загрузки и сообщений
   const [isUpdating, setIsUpdating] = useState(false);
@@ -65,10 +64,8 @@ export default function AccountPage() {
       
       setUser(data);
       setFormData({
-        username: data.username || '',
-        email: data.email || '',
-        currentPassword: '',
-        newPassword: ''
+        nickname: data.nickname || '',
+        email: data.email || ''
       });
     } catch (err: any) {
       console.error('Ошибка загрузки данных пользователя:', err);
@@ -88,7 +85,7 @@ export default function AccountPage() {
     setTimeout(() => setMessage(''), 5000);
   };
 
-  const handleUpdateProfile = async () => {
+  const handleUpdateNickname = async () => {
     try {
       setIsUpdating(true);
       setMessage('');
@@ -99,15 +96,14 @@ export default function AccountPage() {
         return;
       }
 
-      const response = await fetch('https://localhost:7206/api/account/update-profile', {
-        method: 'POST',
+      const response = await fetch('https://localhost:7206/api/account/update-nickname', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          username: formData.username,
-          email: formData.email
+          Nickname: formData.nickname
         }),
       });
 
@@ -118,26 +114,26 @@ export default function AccountPage() {
           return;
         }
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Ошибка обновления профиля');
+        throw new Error(errorData.message || 'Ошибка обновления никнейма');
       }
 
       const data = await response.json();
       
       if (data.success) {
-        showMessage('Профиль успешно обновлен!', 'success');
-        setUser(prev => prev && { ...prev, username: formData.username, email: formData.email });
+        showMessage('Никнейм успешно обновлен!', 'success');
+        setUser(prev => prev && { ...prev, username: formData.nickname });
       } else {
-        throw new Error(data.message || 'Ошибка обновления профиля');
+        throw new Error(data.message || 'Ошибка обновления никнейма');
       }
     } catch (err: any) {
-      console.error('Ошибка обновления профиля:', err);
-      showMessage(err.message || 'Произошла ошибка при обновлении профиля', 'error');
+      console.error('Ошибка обновления никнейма:', err);
+      showMessage(err.message || 'Произошла ошибка при обновлении никнейма', 'error');
     } finally {
       setIsUpdating(false);
     }
   };
 
-  const handleUpdatePassword = async () => {
+  const handleUpdateEmail = async () => {
     try {
       setIsUpdating(true);
       setMessage('');
@@ -148,15 +144,14 @@ export default function AccountPage() {
         return;
       }
 
-      const response = await fetch('https://localhost:7206/api/account/update-password', {
-        method: 'POST',
+      const response = await fetch('https://localhost:7206/api/account/update-email', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          currentPassword: formData.currentPassword,
-          newPassword: formData.newPassword
+          Email: formData.email
         }),
       });
 
@@ -167,21 +162,20 @@ export default function AccountPage() {
           return;
         }
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Ошибка обновления пароля');
+        throw new Error(errorData.message || 'Ошибка обновления email');
       }
 
       const data = await response.json();
       
       if (data.success) {
-        showMessage('Пароль успешно обновлен!', 'success');
-        setShowPasswordModal(false);
-        setFormData(prev => ({ ...prev, currentPassword: '', newPassword: '' }));
+        showMessage('Email успешно обновлен!', 'success');
+        setUser(prev => prev && { ...prev, email: formData.email });
       } else {
-        throw new Error(data.message || 'Ошибка обновления пароля');
+        throw new Error(data.message || 'Ошибка обновления email');
       }
     } catch (err: any) {
-      console.error('Ошибка обновления пароля:', err);
-      showMessage(err.message || 'Произошла ошибка при обновлении пароля', 'error');
+      console.error('Ошибка обновления email:', err);
+      showMessage(err.message || 'Произошла ошибка при обновлении email', 'error');
     } finally {
       setIsUpdating(false);
     }
@@ -204,10 +198,10 @@ export default function AccountPage() {
       }
 
       const formData = new FormData();
-      formData.append('avatar', avatarFile);
+      formData.append('Image', avatarFile);
 
       const response = await fetch('https://localhost:7206/api/account/update-avatar', {
-        method: 'POST',
+        method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
@@ -310,7 +304,7 @@ export default function AccountPage() {
           </div>
           
           <div className="nav-actions">
-            <AvatarDropdown username={user.username} />
+            <AvatarDropdown username={user.nickname || user.username} />
           </div>
         </div>
       </header>
@@ -325,7 +319,7 @@ export default function AccountPage() {
                 {user.avatarUrl ? (
                   <img 
                     src={user.avatarUrl} 
-                    alt={user.username}
+                    alt={user.nickname || user.username}
                     className="avatar-image"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMDAgNzBDMTE2LjU2OSA3MCAxMzAgODMuNDMxIDEzMCAxMDBDMTMwIDExNi41NjkgMTE2LjU2OSAxMzAgMTAwIDEzMEM4My40MzEgMTMwIDcwIDExNi41NjkgNzAgMTAwQzcwIDgzLjQzMSA4My40MzEgNzAgMTAwIDcwWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4K';
@@ -333,7 +327,7 @@ export default function AccountPage() {
                   />
                 ) : (
                   <div className="avatar-placeholder">
-                    {user.username.charAt(0).toUpperCase()}
+                    {(user.nickname || user.username).charAt(0).toUpperCase()}
                   </div>
                 )}
                 <button
@@ -349,7 +343,7 @@ export default function AccountPage() {
             </div>
             
             <div className="profile-info">
-              <h1 className="profile-title">Настройки профиля</h1>
+              <h1 className="profile-title">{user.nickname || user.username}</h1>
               <p className="profile-subtitle">
                 Управляйте своими данными и настройками аккаунта
               </p>
@@ -358,7 +352,7 @@ export default function AccountPage() {
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  Регистрация: {new Date(user.createdAt).toLocaleDateString()}
+                  Регистрация: {new Date(user.created).toLocaleDateString()}
                 </span>
               </div>
             </div>
@@ -366,34 +360,29 @@ export default function AccountPage() {
 
           {/* Profile Form */}
           <div className="profile-form">
+            {/* Nickname Section */}
             <div className="form-section">
-              <h3 className="section-title">Основная информация</h3>
+              <h3 className="section-title">
+                <svg className="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Имя пользователя
+              </h3>
               
               <div className="form-group">
-                <label className="form-label">Имя пользователя</label>
+                <label className="form-label">Никнейм</label>
                 <input
                   type="text"
                   className="form-input"
-                  value={formData.username}
-                  onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
-                  placeholder="Введите имя пользователя"
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Email</label>
-                <input
-                  type="email"
-                  className="form-input"
-                  value={formData.email}
-                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="Введите email"
+                  value={formData.nickname}
+                  onChange={(e) => setFormData(prev => ({ ...prev, nickname: e.target.value }))}
+                  placeholder="Введите новый никнейм"
                 />
               </div>
 
               <button
-                onClick={handleUpdateProfile}
-                disabled={isUpdating}
+                onClick={handleUpdateNickname}
+                disabled={isUpdating || !formData.nickname.trim()}
                 className="form-btn primary"
               >
                 {isUpdating ? (
@@ -402,23 +391,70 @@ export default function AccountPage() {
                     Обновление...
                   </span>
                 ) : (
-                  'Сохранить изменения'
+                  'Обновить никнейм'
                 )}
               </button>
             </div>
 
+            {/* Email Section */}
             <div className="form-section">
-              <h3 className="section-title">Безопасность</h3>
-              
-              <button
-                onClick={() => setShowPasswordModal(true)}
-                className="form-btn secondary"
-              >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              <h3 className="section-title">
+                <svg className="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                Изменить пароль
+                Email адрес
+              </h3>
+              
+              <div className="form-group">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="form-input"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="Введите новый email"
+                />
+              </div>
+
+              <button
+                onClick={handleUpdateEmail}
+                disabled={isUpdating || !formData.email.trim()}
+                className="form-btn primary"
+              >
+                {isUpdating ? (
+                  <span className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Обновление...
+                  </span>
+                ) : (
+                  'Обновить email'
+                )}
               </button>
+            </div>
+
+            {/* Avatar Section */}
+            <div className="form-section">
+              <h3 className="section-title">
+                <svg className="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Аватар профиля
+              </h3>
+              
+              <div className="avatar-info">
+                <p className="avatar-description">
+                  Загрузите изображение для вашего профиля. Рекомендуемый размер: 200x200 пикселей.
+                </p>
+                <button
+                  onClick={() => setShowAvatarModal(true)}
+                  className="form-btn secondary"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  Загрузить аватар
+                </button>
+              </div>
             </div>
           </div>
 
@@ -474,63 +510,6 @@ export default function AccountPage() {
                 className="modal-btn primary"
               >
                 {isUpdating ? 'Загрузка...' : 'Загрузить'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Password Change Modal */}
-      {showPasswordModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button
-              onClick={() => setShowPasswordModal(false)}
-              disabled={isUpdating}
-              className="modal-close-btn"
-            >
-              &times;
-            </button>
-            <h2 className="modal-title">Изменить пароль</h2>
-            
-            <div className="form-group">
-              <label className="form-label">Текущий пароль</label>
-              <input
-                type="password"
-                className="form-input"
-                value={formData.currentPassword}
-                onChange={(e) => setFormData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                placeholder="Введите текущий пароль"
-                disabled={isUpdating}
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Новый пароль</label>
-              <input
-                type="password"
-                className="form-input"
-                value={formData.newPassword}
-                onChange={(e) => setFormData(prev => ({ ...prev, newPassword: e.target.value }))}
-                placeholder="Введите новый пароль"
-                disabled={isUpdating}
-              />
-            </div>
-
-            <div className="modal-actions">
-              <button
-                onClick={() => setShowPasswordModal(false)}
-                disabled={isUpdating}
-                className="modal-btn secondary"
-              >
-                Отмена
-              </button>
-              <button
-                onClick={handleUpdatePassword}
-                disabled={isUpdating || !formData.currentPassword || !formData.newPassword}
-                className="modal-btn primary"
-              >
-                {isUpdating ? 'Обновление...' : 'Изменить пароль'}
               </button>
             </div>
           </div>

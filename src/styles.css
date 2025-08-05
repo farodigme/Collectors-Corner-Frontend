@@ -662,29 +662,45 @@ button:hover {
 
 .account-card {
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* Заголовок профиля */
 .profile-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 2rem;
+  padding: 3rem 2rem;
   display: flex;
   align-items: center;
   gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
 }
 
 .avatar-section {
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar-container {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
 }
 
 .avatar-image {
@@ -692,81 +708,111 @@ button:hover {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid rgba(255, 255, 255, 0.3);
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.avatar-image:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .avatar-placeholder {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: bold;
-  border: 4px solid rgba(255, 255, 255, 0.3);
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .avatar-edit-btn {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #6366f1;
+  bottom: 5px;
+  right: 5px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
 .avatar-edit-btn:hover {
-  background: #5855eb;
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #5855eb, #7c3aed);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .profile-info {
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .profile-title {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.5rem;
+  font-weight: 800;
   margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-subtitle {
-  font-size: 1rem;
+  font-size: 1.1rem;
   opacity: 0.9;
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.6;
 }
 
 .profile-meta {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
 .meta-item {
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Форма профиля */
 .profile-form {
-  padding: 2rem;
+  padding: 3rem 2rem;
 }
 
 .form-section {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  background: #fafbfc;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.form-section:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
 }
 
 .form-section:last-child {
@@ -774,12 +820,14 @@ button:hover {
 }
 
 .section-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 700;
   color: #1f2937;
   margin: 0 0 1.5rem 0;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
   border-bottom: 2px solid #e5e7eb;
+  display: flex;
+  align-items: center;
 }
 
 .form-group {
@@ -788,31 +836,34 @@ button:hover {
 
 .form-label {
   display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #374151;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .form-input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   box-sizing: border-box;
+  background: white;
 }
 
 .form-input:focus {
   outline: none;
   border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
 }
 
 .form-input:disabled {
   background-color: #f9fafb;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* Кнопки */
@@ -822,68 +873,103 @@ button:hover {
   justify-content: center;
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   text-decoration: none;
+  min-width: 140px;
 }
 
 .form-btn.primary {
-  background-color: #6366f1;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .form-btn.primary:hover:not(:disabled) {
-  background-color: #5855eb;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #5855eb, #7c3aed);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
 }
 
 .form-btn.primary:disabled {
-  background-color: #9ca3af;
+  background: linear-gradient(135deg, #9ca3af, #a1a1aa);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
 .form-btn.secondary {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  background: white;
+  color: #6366f1;
+  border: 2px solid #6366f1;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
 }
 
 .form-btn.secondary:hover:not(:disabled) {
-  background-color: #e5e7eb;
-  border-color: #9ca3af;
+  background: #6366f1;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
 }
 
 .form-btn.secondary:disabled {
-  background-color: #f9fafb;
+  background: #f9fafb;
   color: #9ca3af;
+  border-color: #d1d5db;
   cursor: not-allowed;
+}
+
+/* Информация об аватаре */
+.avatar-info {
+  text-align: center;
+}
+
+.avatar-description {
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Сообщения */
 .message {
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 8px;
-  font-weight: 500;
+  margin: 2rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  font-weight: 600;
   text-align: center;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .message-success {
-  background-color: #d1fae5;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
   color: #065f46;
-  border: 1px solid #a7f3d0;
+  border: 1px solid #10b981;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
 }
 
 .message-error {
-  background-color: #fee2e2;
+  background: linear-gradient(135deg, #fee2e2, #fca5a5);
   color: #991b1b;
-  border: 1px solid #fca5a5;
+  border: 1px solid #ef4444;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
 }
 
 /* Модальные окна */
@@ -893,51 +979,73 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
+  backdrop-filter: blur(5px);
 }
 
 .modal-content {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 2rem;
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modal-close-btn {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: none;
+  background: #f3f4f6;
   border: none;
-  font-size: 1.5rem;
-  color: #9ca3af;
+  font-size: 1.25rem;
+  color: #6b7280;
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: color 0.2s;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-close-btn:hover:not(:disabled) {
+  background: #e5e7eb;
   color: #374151;
+  transform: scale(1.1);
 }
 
 .modal-close-btn:disabled {
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .modal-title {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 700;
   color: #1f2937;
   margin: 0 0 1.5rem 0;
   text-align: center;
@@ -950,17 +1058,21 @@ button:hover {
 
 .file-input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1.25rem;
   border: 2px dashed #d1d5db;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #f9fafb;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #6b7280;
 }
 
 .file-input:hover {
   border-color: #6366f1;
   background-color: #f0f9ff;
+  color: #6366f1;
 }
 
 .file-input:disabled {
@@ -971,8 +1083,8 @@ button:hover {
 .file-info {
   margin-top: 1rem;
   padding: 1rem;
-  background-color: #f0f9ff;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border-radius: 10px;
   border: 1px solid #bae6fd;
 }
 
@@ -980,12 +1092,13 @@ button:hover {
   margin: 0.25rem 0;
   font-size: 0.9rem;
   color: #0369a1;
+  font-weight: 500;
 }
 
 /* Действия модального окна */
 .modal-actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   justify-content: flex-end;
   margin-top: 2rem;
 }
@@ -993,39 +1106,48 @@ button:hover {
 .modal-btn {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  min-width: 100px;
 }
 
 .modal-btn.primary {
-  background-color: #6366f1;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
 .modal-btn.primary:hover:not(:disabled) {
-  background-color: #5855eb;
+  background: linear-gradient(135deg, #5855eb, #7c3aed);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
 }
 
 .modal-btn.primary:disabled {
-  background-color: #9ca3af;
+  background: linear-gradient(135deg, #9ca3af, #a1a1aa);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .modal-btn.secondary {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  background: white;
+  color: #6b7280;
+  border: 2px solid #d1d5db;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .modal-btn.secondary:hover:not(:disabled) {
-  background-color: #e5e7eb;
+  background: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
 }
 
 .modal-btn.secondary:disabled {
-  background-color: #f9fafb;
+  background: #f9fafb;
   color: #9ca3af;
   cursor: not-allowed;
 }
@@ -1039,16 +1161,26 @@ button:hover {
   .profile-header {
     flex-direction: column;
     text-align: center;
-    gap: 1rem;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
   }
   
   .avatar-container {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
   
   .profile-title {
-    font-size: 1.5rem;
+    font-size: 2rem;
+  }
+  
+  .profile-form {
+    padding: 2rem 1.5rem;
+  }
+  
+  .form-section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
   }
   
   .modal-actions {
@@ -1057,5 +1189,10 @@ button:hover {
   
   .modal-btn {
     width: 100%;
+  }
+  
+  .form-btn {
+    width: 100%;
+    min-width: auto;
   }
 }
